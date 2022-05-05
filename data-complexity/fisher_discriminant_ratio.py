@@ -1,16 +1,20 @@
-import collections
-
 import pandas as pd
 import numpy as np
+from sklearn.datasets import load_iris
 
 
 def fisher_discriminant_ratio(features: pd.DataFrame, target: pd.DataFrame, ) -> float:
     """
+    calculates Maximum Fisher's Discriminant Ratio (F1 measure) for the provided data.
+    calculations are based on:
+        https://arxiv.org/pdf/1808.03591.pdf
 
-    :param features:
-    :param target:
-    :return:
+    :param features: a matrix containing numerical features describing the data
+    :param target: a dataframe containing target classes of the data
+    :return: computed F1 measure
     """
+    assert features.shape[0] == target.shape[0], 'Features and target are required to have the same number of instances'
+
     target_name = target.columns[0]
     n_cj = target.groupby(target_name)[target_name].count()
 
@@ -35,7 +39,12 @@ def fisher_discriminant_ratio(features: pd.DataFrame, target: pd.DataFrame, ) ->
     return 1 / (1 + np.max(r))
 
 
-
-# for tests
 if __name__ == '__main__':
-    pass
+    iris = load_iris()
+    X = iris.data
+    y = iris.target
+    X = pd.DataFrame(X, columns=['sepal length (cm)', 'sepal width (cm)', 'petal length (cm)',
+                                 'petal width (cm)'])
+    y = pd.DataFrame(y, columns=['target'])
+    f1 = fisher_discriminant_ratio(X, y)
+    print(f'F1 measure: {f1}')
