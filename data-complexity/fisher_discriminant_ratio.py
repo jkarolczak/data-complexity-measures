@@ -1,16 +1,15 @@
 import pandas as pd
 import numpy as np
-from dcm import dcm
 from sklearn.datasets import load_iris
 
 
-def fisher_discriminant_ratio(features: pd.DataFrame, target: pd.DataFrame, ) -> float:
+def f1(features: pd.DataFrame, target: pd.DataFrame) -> float:
     """
     calculates Maximum Fisher's Discriminant Ratio (F1 measure) for the provided data.
     calculations are based on:
         https://arxiv.org/pdf/1808.03591.pdf
 
-    :param features: a matrix containing numerical features describing the data
+    :param features: a dataframe containing numerical features describing the data
     :param target: a dataframe containing target classes of the data
     :return: computed F1 measure
     """
@@ -42,12 +41,8 @@ def fisher_discriminant_ratio(features: pd.DataFrame, target: pd.DataFrame, ) ->
 
 
 if __name__ == '__main__':
-    iris = load_iris()
-    X = iris.data
-    y = iris.target
-    X = pd.DataFrame(X, columns=['sepal length (cm)', 'sepal width (cm)', 'petal length (cm)',
-                                 'petal width (cm)'])
-    y = pd.DataFrame(y, columns=['target'])
-    f1 = fisher_discriminant_ratio(X, y)
+    X, y = load_iris(as_frame=True, return_X_y=True)
+    y = y.to_frame()
+    f1 = f1(X, y)
 
     print(f'F1 measure: {f1}')
