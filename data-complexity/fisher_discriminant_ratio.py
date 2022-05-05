@@ -1,5 +1,6 @@
 import pandas as pd
 import numpy as np
+from dcm import dcm
 from sklearn.datasets import load_iris
 
 
@@ -15,6 +16,7 @@ def fisher_discriminant_ratio(features: pd.DataFrame, target: pd.DataFrame, ) ->
     """
     assert features.shape[0] == target.shape[0], 'Features and target are required to have the same number of instances'
 
+    assert len(features.columns) == len(features.select_dtypes([np.number]).columns), 'Only numerical features are accepted'
     target_name = target.columns[0]
     n_cj = target.groupby(target_name)[target_name].count()
 
@@ -47,4 +49,5 @@ if __name__ == '__main__':
                                  'petal width (cm)'])
     y = pd.DataFrame(y, columns=['target'])
     f1 = fisher_discriminant_ratio(X, y)
+
     print(f'F1 measure: {f1}')
