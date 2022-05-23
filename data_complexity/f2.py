@@ -13,7 +13,7 @@ def overlapping_area(c1: pd.DataFrame, c2: pd.DataFrame) -> float:
     nominator = np.clip(np.min(_max, axis=-2) - np.max(_min, axis=-2), a_min=0.0, a_max=np.inf)
     denominator = np.max(_max, axis=-2) - np.min(_min, axis=-2)
 
-    return float(np.prod(np.divide(nominator, denominator)))
+    return float(np.prod(np.nan_to_num(np.divide(nominator, denominator))))
 
 
 def f2(
